@@ -1,29 +1,55 @@
-# Movie House 🎬
+# 🎬 Movie House
 
-This is a **Spring Boot Microservices Project** named **Movie House**, demonstrating microservice architecture using Java and Spring Boot.
+**Movie House** is a microservices-based movie ticket booking platform built using Java 17 and Spring Boot. It demonstrates a modular architecture including service discovery, API gateway, and RESTful communication between services.
 
-## 🔧 Tech Stack
+---
+
+## 🚀 Features
+
+- **Microservices Architecture** – Independently deployable and scalable services.
+- **Service Discovery** – Uses Zookeeper for dynamic service registration and discovery.
+- **API Gateway** – Centralized entry point for all service communications.
+- **RESTful APIs** – Clean and well-documented endpoints.
+- **Database Integration** – Works with PostgreSQL or MySQL.
+- **Swagger/OpenAPI** – Easy API documentation and testing interface.
+
+---
+
+## 🧱 Microservices Overview
+
+| Service Name        | Description                                   |
+|---------------------|-----------------------------------------------|
+| `user-service`      | Manages user registration and profiles.       |
+| `movie_service`     | Handles movie listings and details.           |
+| `ticket-service`    | Manages ticket bookings and schedules.        |
+| `location-service`  | Manages theater locations and addresses.      |
+| `image-service`     | Handles image upload, storage, and retrieval. |
+
+---
+
+## 🛠️ Tech Stack
+
+- **Language**: Java 17
+- **Framework**: Spring Boot, Spring Cloud
+- **Service Discovery**: Apache Zookeeper
+- **API Gateway**: Spring Cloud Gateway
+- **Databases**: PostgreSQL / MySQL
+- **API Documentation**: Swagger / OpenAPI
+
+---
+
+## ⚙️ Getting Started
+
+### Prerequisites
+
 - Java 17
-- Spring Boot
-- Spring Cloud
-- Zookeeper Discovery Server
-- API Gateway
-- Microservices (User Service, Movie Service, Booking Service, etc.)
-- PostgreSQL / MySQL
-- REST APIs
-- Swagger/OpenAPI
+- Maven
+- Zookeeper
+- PostgreSQL or MySQL
 
-## 🏗️ Modules
-- **Discovery Server** – zookeeper service registry
-- **API Gateway** – Central entry point for services
-- **Movie Service** – Handles movie details
-- **User Service** – Manages user info
-- **Booking Service** – Manages ticket bookings
+### Installation
 
-## 🛠️ Setup
-
-Some more updates are coming soon.............Hold on
-
-```bash
-git clone https://github.com/your-username/movie-house.git
-cd movie-house
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/vivekkumarq/movie-house.git
+   cd movie-house
