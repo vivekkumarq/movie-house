@@ -3,4 +3,6 @@ spring:
     name: movie-service
   cloud:
     zookeeper:
-      connect-string: localhost:2181
+      connect-string: ${ZOOKEEPER_CONNECT_STRING:localhost:2181}
+      discovery:
+        enabled: ${DISCOVERY_ENABLED:true}

@@ -1,5 +1,6 @@
 package com.moviehouse.ticketservice.client;
 
+import com.moviehouse.ticketservice.exception.ServiceUnavailableException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -7,15 +8,15 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import java.util.List;
 
 public abstract class ServiceDiscovery {
+
     @Autowired
     private DiscoveryClient discoveryClient;
 
     public String serviceUrl(String serviceName) {
-
-        List<ServiceInstance> list = discoveryClient.getInstances(serviceName);
-        if (list != null && list.size() > 0 ) {
-            return list.get(0).getUri().toString();
+        List<ServiceInstance> instances = discoveryClient.getInstances(serviceName);
+        if (instances == null || instances.isEmpty()) {
+            throw new ServiceUnavailableException(serviceName + " is not registered with service discovery");
         }
-        return null;
+        return instances.get(0).getUri().toString();
     }
 }

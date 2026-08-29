@@ -1,18 +1,22 @@
 package com.moviehouse.ticketservice.controller;
 
 import com.moviehouse.ticketservice.dataaccess.entity.Ticket;
-import com.moviehouse.ticketservice.dataaccess.model.TicketStatus;
 import com.moviehouse.ticketservice.dataaccess.model.UserTickets;
-import com.moviehouse.ticketservice.repository.SeatRepository;
 import com.moviehouse.ticketservice.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @RequestMapping("/ticket-management/ticket")
@@ -22,32 +26,29 @@ public class TicketController {
 
     @Autowired
     private TicketService ticketService;
-    @Autowired
-    private SeatRepository seatRepository;
 
     @PostMapping
-    public ResponseEntity<Ticket> bookTicket(@RequestBody Ticket ticket){
-        return new ResponseEntity<>(ticketService.bookTicket(ticket), HttpStatus.OK);
+    public ResponseEntity<Ticket> bookTicket(@Valid @RequestBody Ticket ticket) {
+        return new ResponseEntity<>(ticketService.bookTicket(ticket), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Ticket> getTicketById(@PathVariable UUID id){
-        return new ResponseEntity<>(ticketService.getTicketById(id),HttpStatus.OK);
+    public ResponseEntity<Ticket> getTicketById(@PathVariable UUID id) {
+        return ResponseEntity.ok(ticketService.getTicketById(id));
     }
 
     @PutMapping("/cancel/{id}")
-    public ResponseEntity<Ticket> cancelTicket(@PathVariable UUID id){
-        return new ResponseEntity<>(ticketService.cancelTicket(id),HttpStatus.OK);
+    public ResponseEntity<Ticket> cancelTicket(@PathVariable UUID id) {
+        return ResponseEntity.ok(ticketService.cancelTicket(id));
     }
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<UserTickets> getAllTicketsByUser(@PathVariable UUID userId) {
-        return new ResponseEntity<>(ticketService.getAllTicketsByUser(userId),HttpStatus.OK);
+        return ResponseEntity.ok(ticketService.getAllTicketsByUser(userId));
     }
 
     @GetMapping("/show/{showId}")
     public ResponseEntity<List<Ticket>> getAllTicketsByShow(@PathVariable UUID showId) {
-        return new ResponseEntity<>(ticketService.getAllTicketsByShow(showId),HttpStatus.OK);
+        return ResponseEntity.ok(ticketService.getAllTicketsByShow(showId));
     }
-
 }
