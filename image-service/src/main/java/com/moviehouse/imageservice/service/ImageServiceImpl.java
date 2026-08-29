@@ -4,7 +4,6 @@ import com.moviehouse.imageservice.dataaccess.entity.Image;
 import com.moviehouse.imageservice.exception.ImageNotFoundException;
 import com.moviehouse.imageservice.exception.InvalidImageException;
 import com.moviehouse.imageservice.repository.ImageRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,11 +27,11 @@ public class ImageServiceImpl implements ImageService {
     private static final String IMAGE_NOT_FOUND = "Image not found";
 
     private final Path root;
+    private final ImageRepository imageRepository;
 
-    @Autowired
-    private ImageRepository imageRepository;
-
-    public ImageServiceImpl(@Value("${image.storage-dir:images}") String storageDir) {
+    public ImageServiceImpl(ImageRepository imageRepository,
+                            @Value("${image.storage-dir:images}") String storageDir) {
+        this.imageRepository = imageRepository;
         this.root = Paths.get(storageDir).toAbsolutePath().normalize();
     }
 
@@ -44,9 +43,9 @@ public class ImageServiceImpl implements ImageService {
     @Override
     @Transactional
     public Image upload(MultipartFile image) throws IOException {
-        String fileName = StringUtils.cleanPath(
-                StringUtils.getFilename(image.getOriginalFilename() == null ? "" : image.getOriginalFilename()));
-        if (fileName.isEmpty() || fileName.contains("..")) {
+        String originalName = image.getOriginalFilename() == null ? "" : image.getOriginalFilename();
+        String fileName = StringUtils.getFilename(StringUtils.cleanPath(originalName));
+        if (fileName == null || fileName.isEmpty() || fileName.contains("..")) {
             throw new InvalidImageException("Invalid file name");
         }
         String contentType = image.getContentType();
