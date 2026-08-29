@@ -5,6 +5,7 @@ import com.moviehouse.movieinfoservice.dataaccess.entity.Rating;
 import com.moviehouse.movieinfoservice.dataaccess.model.Reference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,10 +19,13 @@ public interface RatingRepository extends JpaRepository<Rating, UUID> {
 
     boolean existsByMovieAndUser(Movie movie, Reference user);
 
+    @EntityGraph(attributePaths = "movie")
     List<Rating> findByUser(Reference user);
 
+    @EntityGraph(attributePaths = "movie")
     List<Rating> findByMovie(Movie movie);
 
+    @EntityGraph(attributePaths = "movie")
     Page<Rating> findAll(Pageable pageable);
 
     @Query("select coalesce(avg(r.movieRating), 0) from Rating r where r.movie = :movie")

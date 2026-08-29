@@ -4,7 +4,6 @@ import com.moviehouse.ticketservice.dataaccess.entity.Show;
 import com.moviehouse.ticketservice.dataaccess.entity.Ticket;
 import com.moviehouse.ticketservice.dataaccess.model.Reference;
 import com.moviehouse.ticketservice.dataaccess.model.TicketStatus;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,16 +18,19 @@ import java.util.UUID;
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, UUID> {
 
-    @EntityGraph(attributePaths = {"seats", "show"})
-    Optional<Ticket> findWithSeatsById(UUID id);
+    String WITH_SEATS = "select distinct t from Ticket t "
+            + "left join fetch t.seats left join fetch t.show s left join fetch s.theatre ";
+
+    @Query(WITH_SEATS + "where t.id = :id")
+    Optional<Ticket> findWithSeatsById(@Param("id") UUID id);
 
     List<Ticket> findByShowAndStatusIn(Show show, Collection<TicketStatus> statuses);
 
-    @EntityGraph(attributePaths = {"seats", "show"})
-    List<Ticket> findByShow(Show show);
+    @Query(WITH_SEATS + "where t.show = :show")
+    List<Ticket> findByShow(@Param("show") Show show);
 
-    @EntityGraph(attributePaths = {"seats", "show"})
-    List<Ticket> findByUser(Reference user);
+    @Query(WITH_SEATS + "where t.user = :user")
+    List<Ticket> findByUser(@Param("user") Reference user);
 
     @Query("select t.show.id, count(seat) from Ticket t join t.seats seat "
             + "where t.show in :shows and t.status = :status group by t.show.id")

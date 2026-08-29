@@ -21,7 +21,7 @@ public interface MovieRepository extends JpaRepository<Movie, UUID> {
             + "m.id, m.title, m.duration, m.releaseDate, m.description, m.language, m.genre, m.rate, m.poster, m.cover) "
             + "from Movie m";
 
-    @Query("select m from Movie m left join fetch m.ratings where m.id = :id")
+    @Query("select distinct m from Movie m left join fetch m.ratings where m.id = :id")
     Optional<Movie> findWithRatingsById(@Param("id") UUID id);
 
     @Query(value = SUMMARY, countQuery = "select count(m) from Movie m")
