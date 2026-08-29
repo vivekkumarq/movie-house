@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+
 @Repository
 public interface SeatRepository extends JpaRepository<Seat, UUID> {
     List<Seat> findByTicketsIn(Collection<Ticket> tickets);
